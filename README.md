@@ -1,7 +1,4 @@
 # Shapes
-
-Certainly, here's a more professional and structured version of your program requirements:
-
 **Project Title:** Shape Calculator Application
 
 **Objective:**
