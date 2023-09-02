@@ -1,5 +1,5 @@
 # Shapes
-**Project Title:** Shape Calculator Application
+** Shape Calculator Application **
 
 **Objective:**
 Develop an ASP.NET MVC application that allows users to calculate the area or volume of 2D and 3D shapes, respectively. The application should provide a user-friendly interface for selecting the type of calculation (area or volume) and then inputting the required formula variables based on the chosen shape.
