@@ -13,6 +13,18 @@ namespace Shapes.Controllers
         {
             IAreaCalculatable? shape = null;
 
+            if (model?.ShapeType != null)
+            {
+                HttpContext.Session.SetString("ShapeType", model.ShapeType);
+            }
+            else
+            {
+                if (HttpContext.Session.IsAvailable)
+                {
+                    model.ShapeType = HttpContext.Session.GetString("ShapeType") ?? String.Empty;
+                }
+            }
+
             switch (model.ShapeType)
             {
                 case "Rectangle":
@@ -83,8 +95,10 @@ namespace Shapes.Controllers
             return View(model);
         }
 
-
-
+        public ActionResult RenderPartialView(string partialViewName)
+        {
+            return PartialView(partialViewName);
+        }
 
         public IActionResult Privacy()
         {

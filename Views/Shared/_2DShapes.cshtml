@@ -1,0 +1,79 @@
+﻿@model ShapeCalculationModel
+
+@{
+   if (Model != null)
+   {
+        Model.Is2D = true;
+   } 
+}
+<div id="2DShapesContainer">
+    <h2>2D Shapes</h2>
+
+    @using (Html.BeginForm("Calculate", "Home", FormMethod.Post, new { id = "shapeCalculationForm" }))
+    {
+        <!-- Dropdown to select the shape -->
+        <label for="ShapeType">Select a 2D shape:</label>
+        <select id="ShapeType" name="ShapeType">
+            <option value="">Choose the Sahpe</option>
+            <option value="Square">Square</option>
+            <option value="Rectangle">Rectangle</option>
+            <!-- Add more shape options here -->
+        </select>
+
+        <!-- Input fields for shape parameters -->
+        <div id="shapeParameters">
+            <!-- Parameters for a square -->
+            <div id="SquareParameters" class="shape-parameters">
+                <label for="Height">Side Length:</label>
+                <input type="number" id="Height" name="Height" step="any" />
+            </div>
+
+            <!-- Parameters for a rectangle -->
+            <div id="RectangleParameters" class="shape-parameters">
+                <label for="Base">Base:</label>
+                <input type="number" id="Base" name="Base" step="any" />
+                <label for="Height">Height:</label>
+                <input type="number" id="Height" name="Height" step="any" />
+            </div>
+            <!-- Add parameters for other 2D shapes here -->
+        </div>
+
+        <button type="button" id="calculateArea">Calculate Area</button>
+    }
+
+    <div id="result">
+        @if (ViewBag.Result != null)
+        {
+            <strong>Area:</strong> <span id="areaResult">@ViewBag.Result</span>
+        }
+    </div>
+</div>
+
+<script src="/lib/jquery/dist/jquery.min.js"> </script>
+<script>
+    $(document).ready(function () {
+        // Hide all shape parameters initially
+        $(".shape-parameters").hide();
+
+        // Event handler for shape selection
+        $("#ShapeType").change(function () {
+            var selectedShape = $(this).val();
+            // Hide all shape parameters
+            $(".shape-parameters").hide();
+            // Show parameters for the selected shape
+            $("#" + selectedShape + "Parameters").show();
+        });
+
+        // Event handler for Calculate Area button
+        $("#calculateArea").click(function () {
+            // Serialize the form data
+            var formData = $("#shapeCalculationForm").serialize();
+
+            // Submit the form to the Calculate action
+            $.post("@Url.Action("Calculate", "Home")", formData, function (result) {
+                // Update the result container with the calculated area
+                $("#areaResult").text(result);
+            });
+        });
+    });
+</script>

@@ -1,0 +1,77 @@
+﻿@model ShapeCalculationModel
+
+@{
+    if (Model != null)
+    {
+        Model.Is2D = false; 
+    }
+}
+
+<div id="3DShapesContainer">
+    <h2>3D Shapes</h2>
+
+    @using (Html.BeginForm("Calculate", "Home", FormMethod.Post, new { id = "shapeCalculationForm" }))
+    {
+        <label for="ShapeType3D">Select a 3D shape:</label>
+        <select id="ShapeType3D" name="ShapeType">
+            <option value="">Choose the Shape</option>
+            <option value="Sphere">Sphere</option>
+            <option value="Cube">Cube</option>
+            <!-- Add more shape options here -->
+        </select>
+
+        <!-- Input fields for shape parameters -->
+        <div id="shapeParameters3D">
+            <!-- Parameters for a sphere -->
+            <div id="SphereParameters" class="shape-parameters">
+                <label for="Radius">Radius:</label>
+                <input type="number" id="Radius" name="Radius" step="any" />
+            </div>
+
+            <!-- Parameters for a cube -->
+            <div id="CubeParameters" class="shape-parameters">
+                <label for="SideLength">Side Length:</label>
+                <input type="number" id="SideLength" name="SideLength" step="any" />
+            </div>
+            <!-- Add parameters for other 3D shapes here -->
+        </div>
+
+        <button type="button" id="calculateVolume">Calculate Volume</button>
+    }
+
+    <div id="result3D">
+        @if (ViewBag.Result != null)
+        {
+            <strong>Volume:</strong> <span id="volumeResult">@ViewBag.Result</span>
+        }
+    </div>
+</div>
+
+<script src="/lib/jquery/dist/jquery.min.js"> </script>
+<script>
+    $(document).ready(function () {
+        // Hide all 3D shape parameters initially
+        $(".shape-parameters").hide();
+
+        // Event handler for 3D shape selection
+        $("#ShapeType3D").change(function () {
+            var selectedShape3D = $(this).val();
+            // Hide all 3D shape parameters
+            $(".shape-parameters").hide();
+            // Show parameters for the selected 3D shape
+            $("#" + selectedShape3D + "Parameters").show();
+        });
+
+        // Event handler for Calculate Volume button
+        $("#calculateVolume").click(function () {
+            // Serialize the form data
+            var formData3D = $("#shapeCalculationForm").serialize();
+
+            // Submit the form to the Calculate action
+            $.post("@Url.Action("Calculate", "Home")", formData3D, function (result) {
+                // Update the result container with the calculated volume
+                $("#volumeResult").text(result);
+            });
+        });
+    });
+</script>

@@ -1,131 +1,42 @@
-﻿@model ShapeCalculationModel
-
-@using (Html.BeginForm("Calculate", "Home", FormMethod.Post))
-{
-    <label>
-        Calculate:
-        <select name="Is2D">
-            <option value="true">2D</option>
-            <option value="false">3D</option>
-        </select>
-    </label>
-    <br />
-
-    @if (Model is not null && Model.Is2D )
-    {
-        <label>
-            2D Shape Type:
-            <select name="ShapeType">
-                <option value="">Choose the Shape</option>
-                <option value="Rectangle">Rectangle</option>
-                <option value="Square">Square</option>
-                <option value="Triangle">Triangle</option>
-                <option value="Trapezium">Trapezium</option>
-                <option value="Parallelogram">Parallelogram</option>
-                <option value="Rhombus">Rhombus</option>
-                <option value="Kite">Kite</option>
-                <!-- Add options for other 2D shapes -->
-            </select>
-        </label>
-        <br />
-
-        @if (Model.ShapeType == "Rectangle")
-        {
-            <label>
-                Base:
-                <input type="text" name="Base" />
-            </label>
-            <br />
-            <label>
-                Height:
-                <input type="text" name="Height"/>
-            </label>
-        }
-        else if (Model.ShapeType == "Square")
-        {
-            <label>
-                Side Length:
-                <input type="text" name="Height" />
-            </label>
-        }
-        else if (Model.ShapeType == "Triangle")
-        {
-            <label>
-                Base:
-                <input type="text" name="Base" />
-            </label>
-            <br />
-            <label>
-                Perpendicular Height:
-                <input type="text" name="PerpendicularHeight" />
-            </label>
-        }
-        else if (Model.ShapeType == "Trapezium")
-        {
-            <label>
-                Top Base:
-                <input type="text" name="a" />
-            </label>
-            <br />
-            <label>
-                Bottom Base:
-                <input type="text" name="b" />
-            </label>
-            <br />
-            <label>
-                Height:
-                <input type="text" name="Height" />
-            </label>
-        }
-        else if (Model.ShapeType == "Parallelogram")
-        {
-            <label>
-                Base:
-                <input type="text" name="Base" />
-            </label>
-            <br />
-            <label>
-                Perpendicular Height:
-                <input type="text" name="PerpendicularHeight" />
-            </label>
-        }
-        else if (Model.ShapeType == "Rhombus")
-        {
-            <label>
-                Diagonal 1:
-                <input type="text" name="Length" />
-            </label>
-            <br />
-            <label>
-                Diagonal 2:
-                <input type="text" name="Height" />
-            </label>
-        }
-        else if (Model.ShapeType == "Kite")
-        {
-            <label>
-                Diagonal 1:
-                <input type="text" name="Length" />
-            </label>
-            <br />
-            <label>
-                Diagonal 2:
-                <input type="text" name="Height" />
-            </label>
-        }
-    }
-    else
-    {
-        <!-- Add UI elements for selecting 3D shapes and their parameters -->
-    }
-
-    <br />
-    <input type="submit" value="Calculate"/>
+﻿@{
+    ViewBag.Title = "Geometry Viewer";
 }
 
+<h1>Welcome to the Geometry Viewer</h1>
+
+<!-- Buttons for choosing 2D or 3D view -->
 <div>
-    @if (ViewBag.Result != null)
-    {
-        <p>Result: @ViewBag.Result</p>
-    }
+    <button id="btn2D">2D View</button>
+    <button id="btn3D">3D View</button>
 </div>
+
+<!-- Container for rendering partial views -->
+<div id="shapeContainer">
+    <!-- Partial views will be loaded here -->
+</div>
+
+<script src="/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Event handlers for button clicks
+        $("#btn2D").click(function () {
+            loadPartialView("_2DShapes");
+        });
+
+        $("#btn3D").click(function () {
+            loadPartialView("_3DShapes");
+        });
+
+        // Function to load partial views dynamically
+        function loadPartialView(partialViewName) {
+            $.ajax({
+                url: '@Url.Action("RenderPartialView", "Home")', 
+                data: { partialViewName: partialViewName },
+                type: 'GET',
+                success: function (data) {
+                    $('#shapeContainer').html(data);
+                }
+            });
+        }
+    });
+</script>
